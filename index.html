@@ -659,12 +659,24 @@ document.addEventListener('change', function(e) {
 document.addEventListener('click', function(e) {
   var ta = e.target.closest('.msg-text');
   if (!ta) return;
-  ta.select();
-  document.execCommand('copy');
   var label = ta.previousElementSibling;
-  if (label) {
-    label.textContent = '✅ Copiado! Agora cole no chat do Facebook.';
-    setTimeout(function() { label.textContent = '💬 Toque para copiar a mensagem:'; }, 3000);
+  var texto = ta.value;
+  function ok() {
+    if (label) {
+      label.textContent = '✅ Copiado! Agora cole no chat do Facebook.';
+      setTimeout(function() { label.textContent = '💬 Toque para copiar a mensagem:'; }, 3000);
+    }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(texto).then(ok).catch(function() {
+      ta.select();
+      document.execCommand('copy');
+      ok();
+    });
+  } else {
+    ta.select();
+    document.execCommand('copy');
+    ok();
   }
 });
 </script>
