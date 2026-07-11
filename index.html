@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Garimpo de Videogames — Duilio</title>
+  <meta name="description" content="Anúncios de videogames particulares em Sorocaba, Votorantim e Araçoiaba da Serra.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Garimpo de Videogames — Duilio">
+  <meta property="og:description" content="PS2 ao PS5, Xbox One S e Series S — só particular, Sorocaba e região.">
+  <meta property="og:image" content="__ZAPIA_SITE_ORIGIN__/_z/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="__ZAPIA_SITE_ORIGIN__/_z/og.png">
+  <link rel="manifest" href="__ZAPIA_SITE_URL__/manifest.webmanifest">
+  <meta name="theme-color" content="#1d4ed8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Garimpo Games">
+  <link rel="apple-touch-icon" href="__ZAPIA_SITE_URL__/apple-touch-icon.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      color: #111;
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: #1d4ed8;
+      color: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 700; }
+    header p  { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+
+    .aviso {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.78rem;
+      color: #1e40af;
+      margin-bottom: 20px;
+    }
+
+    input[type="checkbox"] { display: none; }
+
+    .item-wrap {
+      border: 2px solid #111;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .card {
+      background: white;
+      border-radius: 0;
+      margin-bottom: 0;
+      border: none;
+      overflow: hidden;
+      transition: opacity 0.3s, background 0.3s;
+    }
+
+    .item-wrap:has(input.cb-visto:checked) {
+      border-color: #f87171;
+      background: #fee2e2;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card {
+      background: #fee2e2;
+      opacity: 0.6;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card .card-body {
+      text-decoration: line-through;
+      color: #b91c1c;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card label.btn-visto {
+      background: #dc2626;
+      color: white;
+    }
+    .item-wrap:has(input.cb-visto:checked) .card label.btn-visto::before {
+      content: "✓ Visto";
+    }
+
+    .item-wrap:has(input.cb-quente:checked) .card {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px #fca5a5;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card .card-header {
+      background: #fee2e2;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card label.btn-quente {
+      background: #dc2626;
+      color: white;
+    }
+    .item-wrap:has(input.cb-quente:checked) .card label.btn-quente::before {
+      content: "🔥 Quente!";
+    }
+
+    .card-header {
+      background: #eff6ff;
+      padding: 10px 14px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .modelo { font-weight: 700; font-size: 0.95rem; color: #111; }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .badge-ps5  { background: #1d4ed8; color: white; }
+    .badge-ps4  { background: #7c3aed; color: white; }
+    .badge-ps3  { background: #dc2626; color: white; }
+    .badge-ps2  { background: #059669; color: white; }
+    .badge-xbox { background: #047857; color: white; }
+
+    .card-body {
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #374151;
+    }
+    .card-body .preco  { font-size: 1rem; font-weight: 700; color: #111; }
+    .card-body .desc   { font-size: 0.82rem; color: #4b5563; font-style: italic; margin-top: 2px; }
+    .card-body .cidade { font-size: 0.78rem; color: #6b7280; margin-top: 2px; }
+
+    .card-footer {
+      padding: 8px 14px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-link {
+      display: inline-block;
+      background: #1d4ed8;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    label.btn-visto {
+      display: inline-block;
+      background: #e5e7eb;
+      color: #374151;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    label.btn-visto::before { content: "Já vi"; }
+
+    label.btn-quente {
+      display: inline-block;
+      background: #fee2e2;
+      color: #dc2626;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    label.btn-quente::before { content: "🔥 Quente"; }
+
+    .fonte {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-left: auto;
+    }
+
+    .varrida-header {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 10px 4px 6px;
+      border-top: 3px solid #111;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+    .varrida-header:first-child {
+      border-top: none;
+      margin-top: 0;
+    }
+
+    .data-atualizacao {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 Garimpo de Videogames</h1>
+  <p>Sorocaba · Votorantim · Araçoiaba — só particular, PS2 ao PS5 e Xbox</p>
+</header>
+
+<div class="aviso">
+  💡 Toque em <strong>Já vi</strong> para riscar um anúncio, ou em <strong>🔥 Quente</strong> para destacar os que valem a pena.
+</div>
+
+<!-- ===================== ANÚNCIOS ===================== -->
+
+<div class="varrida-header">🔍 Varrida — 11/07/2026 às 14h30 · Anúncios do dia</div>
+
+<!-- 1 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v1">
+<input type="checkbox" class="cb-quente" id="qv1">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Xbox One S 1TB + controle do Series</span>
+    <span class="badge badge-xbox">Xbox One S</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 950</div>
+    <div class="cidade">📍 Sorocaba · Postado há ~1h</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/4456914211121717" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v1"></label>
+    <label class="btn-quente" for="qv1"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 2 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v2">
+<input type="checkbox" class="cb-quente" id="qv2">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS4 Slim 1TB</span>
+    <span class="badge badge-ps4">PS4</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.349</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1485925916154719" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v2"></label>
+    <label class="btn-quente" for="qv2"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 3 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v3">
+<input type="checkbox" class="cb-quente" id="qv3">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Xbox One S</span>
+    <span class="badge badge-xbox">Xbox One S</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.000</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1968227790479135" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v3"></label>
+    <label class="btn-quente" for="qv3"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 4 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v4">
+<input type="checkbox" class="cb-quente" id="qv4">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS3 FAT Evinat 4.93 + 2 controles</span>
+    <span class="badge badge-ps3">PS3</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">Preço a consultar</div>
+    <div class="desc">"Liga e joga, não precisa de ativação. Game muito novo."</div>
+    <div class="cidade">📍 Sorocaba · Postado há 13h ⚡</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1335048935425256" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v4"></label>
+    <label class="btn-quente" for="qv4"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 5 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v5">
+<input type="checkbox" class="cb-quente" id="qv5">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS4 Slim + 5 jogos</span>
+    <span class="badge badge-ps4">PS4</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.500</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/995296746810214" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v5"></label>
+    <label class="btn-quente" for="qv5"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 6 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v6">
+<input type="checkbox" class="cb-quente" id="qv6">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS2 OPL Desbloqueado</span>
+    <span class="badge badge-ps2">PS2</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 300</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1719291502413290" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v6"></label>
+    <label class="btn-quente" for="qv6"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 7 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v7">
+<input type="checkbox" class="cb-quente" id="qv7">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Xbox Series S 512GB</span>
+    <span class="badge badge-xbox">Xbox Series S</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 2.500</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1676761510205432" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v7"></label>
+    <label class="btn-quente" for="qv7"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 8 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v8">
+<input type="checkbox" class="cb-quente" id="qv8">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Xbox One S 1TB + 1 controle do Series</span>
+    <span class="badge badge-xbox">Xbox One S</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.000</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1692095668723693" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v8"></label>
+    <label class="btn-quente" for="qv8"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 9 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v9">
+<input type="checkbox" class="cb-quente" id="qv9">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Xbox One S</span>
+    <span class="badge badge-xbox">Xbox One S</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.100</div>
+    <div class="cidade">📍 Araçoiaba da Serra</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1387357663246560" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v9"></label>
+    <label class="btn-quente" for="qv9"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 10 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v10">
+<input type="checkbox" class="cb-quente" id="qv10">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS2 — R$ 180</span>
+    <span class="badge badge-ps2">PS2</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 180</div>
+    <div class="cidade">📍 Sorocaba · Postado há 27min 🔥</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1228780819302226" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v10"></label>
+    <label class="btn-quente" for="qv10"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 11 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v11">
+<input type="checkbox" class="cb-quente" id="qv11">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">Xbox One S 1TB + 1 jogo</span>
+    <span class="badge badge-xbox">Xbox One S</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.150</div>
+    <div class="desc">"Quem tiver interesse chama PV"</div>
+    <div class="cidade">📍 Sorocaba · Recente</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/2241327306628734" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v11"></label>
+    <label class="btn-quente" for="qv11"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 12 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v12">
+<input type="checkbox" class="cb-quente" id="qv12">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS4 Pro + 2 controles</span>
+    <span class="badge badge-ps4">PS4 Pro</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 1.600</div>
+    <div class="desc">Bem conservado, 2 controles (1 original), todos os cabos</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1548054223497941" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v12"></label>
+    <label class="btn-quente" for="qv12"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 13 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v13">
+<input type="checkbox" class="cb-quente" id="qv13">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS3 Super Slim</span>
+    <span class="badge badge-ps3">PS3</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 700</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1992218971426695" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v13"></label>
+    <label class="btn-quente" for="qv13"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 14 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v14">
+<input type="checkbox" class="cb-quente" id="qv14">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS5 Slim 1TB</span>
+    <span class="badge badge-ps5">PS5</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 3.199</div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/1738863604024442" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v14"></label>
+    <label class="btn-quente" for="qv14"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 15 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v15">
+<input type="checkbox" class="cb-quente" id="qv15">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS3 500GB Desbloqueado + controle original</span>
+    <span class="badge badge-ps3">PS3</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 700 <span style="font-size:0.78rem;color:#6b7280;font-weight:400;">· era R$800</span></div>
+    <div class="cidade">📍 Sorocaba</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/4210885085792196" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v15"></label>
+    <label class="btn-quente" for="qv15"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<!-- 16 -->
+<div class="item-wrap">
+<input type="checkbox" class="cb-visto" id="v16">
+<input type="checkbox" class="cb-quente" id="qv16">
+<div class="card">
+  <div class="card-header">
+    <span class="modelo">PS2</span>
+    <span class="badge badge-ps2">PS2</span>
+  </div>
+  <div class="card-body">
+    <div class="preco">R$ 250</div>
+    <div class="cidade">📍 Sorocaba · Postado há ~30min 🔥</div>
+  </div>
+  <div class="card-footer">
+    <a class="btn-link" href="https://www.facebook.com/marketplace/item/2262994011217682" target="_blank">Ver anúncio</a>
+    <label class="btn-visto" for="v16"></label>
+    <label class="btn-quente" for="qv16"></label>
+    <span class="fonte">Facebook</span>
+  </div>
+</div>
+</div>
+
+<p class="data-atualizacao">Atualizado em 11/07/2026 às 14:59 · 16 anúncios · varredura a cada 30min</p>
+
+</body>
+</html>
