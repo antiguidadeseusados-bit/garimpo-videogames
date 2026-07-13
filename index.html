@@ -885,17 +885,22 @@ document.addEventListener('change', function(e) {
   }
 });
 
-// Copiar mensagem ao clicar na textarea
+// Copiar mensagem e abrir anúncio ao clicar na textarea
 document.addEventListener('click', function(e) {
   var ta = e.target.closest('.msg-text');
   if (!ta) return;
   var label = ta.previousElementSibling;
   var texto = ta.value;
+  // Pegar o link do botão "Ver anúncio" dentro do mesmo card
+  var card = ta.closest('.item-wrap');
+  var link = card ? card.querySelector('a.btn-link') : null;
+  var url = link ? link.href : null;
   function ok() {
     if (label) {
-      label.textContent = '✅ Copiado! Agora cole no chat do Facebook.';
+      label.textContent = '✅ Copiado! Abrindo anúncio...';
       setTimeout(function() { label.textContent = '💬 Toque para copiar a mensagem:'; }, 3000);
     }
+    if (url) window.open(url, '_blank');
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(texto).then(ok).catch(function() {
